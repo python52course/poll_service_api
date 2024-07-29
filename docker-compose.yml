@@ -4,7 +4,7 @@ services:
       container_name: "mongo_db"
       restart: always    
       ports:
-        - "27017:27017"
+        - "${MONGO_DB_PORT}:27017"
       volumes:
       - dbdata:/data/db
 
@@ -30,12 +30,12 @@ services:
     container_name: mongo-express
     restart: always
     ports:
-      - "8081:8081"
+      - "${MONGO_EXPRESS_PORT}:8081"
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo_db
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_DB_ADMIN_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_DB_ADMIN_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://mongo_db:27017/ 
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_ADMIN_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_ADMIN_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://mongo_db:${MONGO_DB_PORT}/ 
     depends_on:
       - mongo_db
 
