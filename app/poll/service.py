@@ -16,6 +16,6 @@ async def create_poll(poll: CreatePoll) -> Poll:
     return Poll(**poll_data)
 
 
-async def check_exists_poll(question: str) -> Poll:
+async def _check_exists_poll(question: str) -> Poll:
     poll = await poll_collection.find_one({"question": question})
     return poll["_id"] if poll else False

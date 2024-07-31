@@ -19,3 +19,4 @@
 * `make app-logs` - display logs in app container
 * `make app-shell` - go to contenerized interactive shell (bash)
 * `make tests` - run all tests
+* `make tests-coverage` - generate coverage reports

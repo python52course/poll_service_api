@@ -27,6 +27,10 @@ app-shell:
 tests:
 	${EXEC} ${APP_CONTAINER} pytest -vs
 
+.PHONY: tests-coverage
+tests-coverage:
+	${EXEC} ${APP_CONTAINER} pytest --cov=. tests/
+
 .PHONY: check-flake8
 check-flake8:
 	${EXEC} ${APP_CONTAINER} flake8 .
