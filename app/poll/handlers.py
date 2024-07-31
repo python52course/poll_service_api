@@ -3,12 +3,12 @@ from fastapi import APIRouter, HTTPException, status
 import poll.service as service
 from poll.schemas import CreatePoll, Poll
 
-router = APIRouter(prefix="/api", tags=["Голосование"])
+router = APIRouter(prefix="/api", tags=["Voting"])
 
 
 @router.post(
     "/createPoll/",
-    response_description="Создать новое голосование",
+    response_description="Create a new poll",
     status_code=status.HTTP_201_CREATED,
 )
 async def create_poll_handler(poll: CreatePoll) -> Poll:
@@ -16,7 +16,7 @@ async def create_poll_handler(poll: CreatePoll) -> Poll:
     if existed_poll:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"Опрос уже существует, проверьте опрос c poll_id {existed_poll}",
+            detail=f"The poll already exists, check the poll_id {existed_poll}",
         )
 
     created_pool = await service.create_poll(poll)

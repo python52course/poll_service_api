@@ -16,25 +16,25 @@ class Poll(BaseModel):
 
 
 class CreatePoll(BaseModel):
-    question: str = Field(description="Вопрос")
-    choices: List[str] = Field(description="Варианты голосования")
+    question: str = Field(description="Question")
+    choices: List[str] = Field(description="Poll options")
 
     @field_validator("question")
     def validate_question(cls, value: str):
         if not value.strip():
-            raise ValueError("Вопрос не может быть пустым")
+            raise ValueError("Question can not be empty")
         return value
 
     @field_validator("choices")
     def validate_choices(cls, value: list):
         if len(value) < 2:
-            raise ValueError("Варианты голосования не могут быть пустыми")
+            raise ValueError("Poll options can not be empty")
         return value
 
     class Config:
         json_schema_extra = {
             "example": {
-                "question": "Какой ваш любимый покемон?",
-                "choices": ["Пикачу", "Чармандер", "Сквиртл"],
+                "question": "What is your favorite Pokemon?",
+                "choices": ["Pikachu", "Charmander", "Squirting"],
             },
         }

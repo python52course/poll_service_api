@@ -6,7 +6,7 @@ from main import app
 
 async def test_create_poll(connection_db):
     data = {
-        "question": "Какой ваш любимый язык программирования?",
+        "question": "What is your favorite programming language?",
         "choices": ["Python", "JavaScript", "Java", "Swift"],
     }
     async with AsyncClient(app=app, base_url=settings.api_url) as ac:
@@ -21,7 +21,7 @@ async def test_create_poll(connection_db):
 
 async def test_create_duplicate_poll(connection_db):
     data = {
-        "question": "Какой ваш любимый язык программирования?",
+        "question": "What is your favorite programming language?",
         "choices": ["Python", "JavaScript", "Java", "Swift"],
     }
     async with AsyncClient(app=app, base_url=settings.api_url) as ac:
@@ -30,7 +30,7 @@ async def test_create_duplicate_poll(connection_db):
         response = await ac.post("/createPoll/", json=data)
     response_data = response.json()
     assert response.status_code == 409
-    assert "Опрос уже существует, проверьте опрос c poll_id" in response_data["detail"]
+    assert "The poll already exists, check the poll_id" in response_data["detail"]
 
 
 async def test_for_invalid_input_returns_error_code(connection_db):

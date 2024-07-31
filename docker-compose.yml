@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   mongo_db:
       image: mongo
@@ -17,7 +19,7 @@ services:
       - "${API_PORT}:8000"
     command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     env_file:
-      - .env
+      - ./app/.env
     environment:
       - MONGODB_URL=mongodb://mongo_db
     volumes:
@@ -38,6 +40,7 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://mongo_db:${MONGO_DB_PORT}/ 
     depends_on:
       - mongo_db
+    
 
 volumes:
   dbdata:
