@@ -2,34 +2,35 @@ APP_CONTAINER = poll-app
 DC = docker compose
 EXEC = docker exec -it
 LOGS = docker logs
+ENV = --env-file ./app/.env
 
 .PHONY: app 
 app:
-	${DC} up --build -d
+	${DC} ${ENV} up --build -d
 
 .PHONY: app-restart
 app-restart:
-	${DC} restart
+	${DC} ${ENV} restart
 
 .PHONY: app-down
 app-down:
-	${DC} down
+	${DC} ${ENV} down
 
 .PHONY: app-logs
 app-logs:
-	${LOGS} ${APP_CONTAINER}
+	${LOGS} ${ENV} ${APP_CONTAINER}
 
 .PHONY: app-shell
 app-shell:
-	${EXEC} ${APP_CONTAINER} /bin/bash
+	${EXEC} ${ENV} ${APP_CONTAINER} /bin/bash
 
 .PHONY: tests
 tests:
-	${EXEC} ${APP_CONTAINER} pytest -vs
+	${EXEC} ${ENV} ${APP_CONTAINER} pytest -vs
 
 .PHONY: tests-coverage
 tests-coverage:
-	${EXEC} ${APP_CONTAINER} pytest --cov=. tests/
+	${EXEC} ${ENV} ${APP_CONTAINER} pytest --cov=. tests/
 
 .PHONY: check-flake8
 check-flake8:

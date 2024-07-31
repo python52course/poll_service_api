@@ -1,12 +1,16 @@
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    api_url: str = "http://127.0.0.1:8000/api"
+    """Variables from .env"""
 
-    class Config:
-        env_file = ".env"
+    host: str
+    api_port: int
+    mongodb_url: str
+
+    model_config = ConfigDict(extra="allow")
 
 
-
-settings = Settings()
+settings = Settings(_env_file=".env", _env_file_encoding="utf-8")
+server_url = f"{settings.host}:{settings.api_port}"
