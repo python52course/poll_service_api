@@ -27,8 +27,10 @@ class CreatePoll(BaseModel):
 
     @field_validator("choices")
     def validate_choices(cls, value: list):
-        if len(value) < 2:
+        if not value:
             raise ValueError("Poll options can not be empty")
+        elif len(set(value)) < 2:
+            raise ValueError("Poll options must be more than 1 unique options")
         return value
 
     class Config:

@@ -7,7 +7,7 @@ from config.settings import settings
 client = AsyncIOMotorClient(settings.mongodb_url)
 
 
-def database():
+def get_database():
     """prepare database"""
 
     TEST_MODE = os.getenv("MODE") == "TEST"
@@ -20,4 +20,4 @@ def database():
     return db, poll_collection
 
 
-db, poll_collection = database()
+db, poll_collection = get_database()
