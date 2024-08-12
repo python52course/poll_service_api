@@ -13,10 +13,6 @@ async def async_session():
 
 @pytest.fixture
 async def create_poll_fixture(request, async_session):
-    data = {
-        "question": "What is your favorite programming language?",
-        "choices": ["Python", "JavaScript", "Java", "Swift"],
-    }
-
+    data = request.param
     response = await async_session.post("/createPoll/", json=data)
     return response.json(), data
