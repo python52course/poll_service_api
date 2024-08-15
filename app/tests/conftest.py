@@ -10,7 +10,7 @@ from config.settings import settings
 os.environ["MODE"] = "TEST"
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(autouse=True)
 async def connection_db():
     """
     Create a test database for use in tests.

@@ -6,6 +6,13 @@ from main import app
 
 
 @pytest.fixture
-async def async_session(connection_db):
+async def async_session():
     async with AsyncClient(app=app, base_url=f"{server_url}/api") as session:
         yield session
+
+
+@pytest.fixture
+async def create_poll_fixture(request, async_session):
+    data = request.param
+    response = await async_session.post("/createPoll/", json=data)
+    return response.json(), data
