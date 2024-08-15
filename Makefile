@@ -9,7 +9,6 @@ ENV = --env-file ./app/.env
 app:
 	${DC} ${ENV} up --build -d
 
-.PHONY: app-restart
 app-restart:
 	${DC} ${ENV} restart
 
@@ -17,25 +16,25 @@ app-down:
 	${DC} ${ENV} down
 
 app-logs:
-	${LOGS} ${APP_CONTAINER}
+	${DC} logs -f ${APP_CONTAINER}
 
 app-shell:
-	${EXEC} ${ENV} ${APP_CONTAINER} /bin/bash
+	${DC} ${ENV} exec ${APP_CONTAINER} /bin/bash
 
 tests:
-	${EXEC} ${ENV} ${APP_CONTAINER} pytest -vs
+	${DC} ${ENV} exec ${APP_CONTAINER} pytest -vs
 
 tests-coverage:
-	${EXEC} ${ENV} ${APP_CONTAINER} pytest --cov=. tests/
+	${DC} ${ENV} exec ${APP_CONTAINER} pytest --cov=. tests
 
 check-flake8:
-	${EXEC} ${APP_CONTAINER} flake8 .
+	${DC} ${ENV} exec ${APP_CONTAINER} flake8 .
 
 check-black:
-	${EXEC} ${APP_CONTAINER} black --check .
+	${DC} ${ENV} exec ${APP_CONTAINER} black --check .
 
 check-isort:
-	${EXEC} ${APP_CONTAINER} isort --check .
+	${DC} ${ENV} exec ${APP_CONTAINER} isort --check .
 
 fix-black-isort:
-	${EXEC} ${APP_CONTAINER} black . ; ${EXEC} ${APP_CONTAINER} isort .
+	${DC} ${ENV} exec ${APP_CONTAINER} black . ; ${DC} ${ENV} exec ${APP_CONTAINER} isort .
