@@ -35,9 +35,7 @@ async def get_result_poll_handler(poll_id: str) -> Poll:
 async def vote_for_specific_choice(poll_id: str, choice_id: str):
     poll = await service.get_poll(poll_id)
     if not poll:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="The poll was not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The poll was not found")
     updated_poll = await service.update_vote_in_poll(poll_id, choice_id)
     if not updated_poll:
         raise HTTPException(

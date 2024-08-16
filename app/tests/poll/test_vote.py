@@ -27,22 +27,35 @@ async def test_valid_vote(async_session, create_poll_fixture):
 
 
 @pytest.mark.parametrize(
-    "poll_id, choice_id, expected_message",
+    "poll_id, choice_id, expected_message, status_code",
     [
-        ("66bf3d2525228d2fb65e0a5b", "7f28b0", {"detail": "The poll was not found"}),
+        (
+            "66bf3d2525228d2fb65e0a5b",
+            "7f28b0",
+            {"detail": "The poll was not found"},
+            status.HTTP_404_NOT_FOUND,
+        ),
         (
             "66bf3d2525228d2fb65e0",
             "7f28b0",
             {"detail": "poll_id is not valid, poll_id must be 24 character"},
+            status.HTTP_400_BAD_REQUEST,
         ),
-        ("", "", {"detail": "poll_id is not valid, poll_id must be 24 character"}),
+        (
+            "",
+            "",
+            {"detail": "poll_id is not valid, poll_id must be 24 character"},
+            status.HTTP_400_BAD_REQUEST,
+        ),
     ],
 )
-async def test_vote_with_invalid_poll_id(async_session, poll_id, choice_id, expected_message):
+async def test_vote_with_invalid_poll_id(
+    async_session, poll_id, choice_id, expected_message, status_code
+):
     response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
 
+    assert response.status_code == status_code
     assert response.json() == expected_message
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.parametrize(
