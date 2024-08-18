@@ -34,10 +34,10 @@ async def get_result_poll_handler(poll_id: str) -> Poll:
 @router.post("/poll/", response_description="Vote for a specific option")
 async def vote_for_specific_choice(poll_id: str, choice_id: str):
     poll = await service.get_poll(poll_id)
-    if not poll:
+    if poll is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The poll was not found")
     updated_poll = await service.update_vote_in_poll(poll_id, choice_id)
-    if not updated_poll:
+    if updated_poll is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="There is no such answer option"
         )

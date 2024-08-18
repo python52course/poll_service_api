@@ -1,4 +1,5 @@
 from uuid import uuid4
+from typing import Optional
 
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -13,7 +14,7 @@ async def _check_exists_poll(question: str) -> Poll:
     return poll["_id"] if poll else False
 
 
-async def _check_object_id(object_id):
+async def _validate_object_id(object_id):
     try:
         object_id = ObjectId(object_id)
     except InvalidId:
@@ -38,23 +39,23 @@ async def create_poll(poll: CreatePoll) -> Poll:
 
 
 async def get_poll_results(poll_id: str) -> Poll:
-    poll_id = await _check_object_id(poll_id)
+    poll_id = await _validate_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:
         poll["id"] = str(poll["_id"])
         return Poll(**poll)
 
 
-async def get_poll(poll_id: str) -> Poll:
-    poll_id = await _check_object_id(poll_id)
+async def get_poll(poll_id: str) -> Optional[Poll]:
+    poll_id = await _validate_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:
         poll["id"] = str(poll["_id"])
         return Poll(**poll)
 
 
-async def update_vote_in_poll(poll_id: str, choice_id: str) -> Poll:
-    poll_id = await _check_object_id(poll_id)
+async def update_vote_in_poll(poll_id: str, choice_id: str) -> Optional[Poll]:
+    poll_id = await _validate_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": ObjectId(poll_id)})
     if poll:
         for choice in poll["choices"]:
@@ -62,7 +63,7 @@ async def update_vote_in_poll(poll_id: str, choice_id: str) -> Poll:
                 choice["votes"] += 1
                 break
         else:
-            return False
+            return None
         await poll_collection.update_one(
             {"_id": ObjectId(poll_id)}, {"$set": {"choices": poll["choices"]}}
         )
