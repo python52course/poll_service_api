@@ -1,4 +1,5 @@
 # Poll Service
+![Tests](https://github.com/python52course/poll_service_api/actions/workflows/ci.yml/badge.svg)
 
 ## Requirements
 - [Docker](https://www.docker.com/get-started)
