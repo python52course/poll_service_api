@@ -16,7 +16,7 @@ async def connection_db():
     Create a test database for use in tests.
     """
 
-    client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongodb_url)
+    client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
     db = client.get_database("test_poll_database")
     AgnosticClient.get_io_loop = asyncio.get_running_loop
     await client.drop_database("test_poll_database")

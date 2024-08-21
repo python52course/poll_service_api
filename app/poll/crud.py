@@ -1,5 +1,5 @@
-from uuid import uuid4
 from typing import Optional
+from uuid import uuid4
 
 from bson import ObjectId
 from bson.errors import InvalidId

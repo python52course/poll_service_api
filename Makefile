@@ -4,7 +4,7 @@ EXEC = docker exec -it
 LOGS = docker logs
 ENV = --env-file ./app/.env
 
-.PHONY: app app-restart app-down app-logs app-shell tests tests-coverage check-flake8 check-black check-isort fix-black
+.PHONY: app app-restart app-down app-logs app-shell tests tests-coverage mypy ruff-check ruff-fix
 
 app:
 	${DC} ${ENV} up --build -d
@@ -27,14 +27,12 @@ tests:
 tests-coverage:
 	${DC} ${ENV} exec ${APP_CONTAINER} pytest --cov=. tests
 
-check-flake8:
-	${DC} ${ENV} exec ${APP_CONTAINER} flake8 .
+mypy:
+	${DC} ${ENV} exec ${APP_CONTAINER} mypy .
 
-check-black:
-	${DC} ${ENV} exec ${APP_CONTAINER} black --check .
+ruff-check:
+	${DC} ${ENV} exec ${APP_CONTAINER} ruff check .
 
-check-isort:
-	${DC} ${ENV} exec ${APP_CONTAINER} isort --check .
+ruff-fix:
+	${DC} ${ENV} exec ${APP_CONTAINER} ruff check . --fix
 
-fix-black-isort:
-	${DC} ${ENV} exec ${APP_CONTAINER} black . ; ${DC} ${ENV} exec ${APP_CONTAINER} isort .
