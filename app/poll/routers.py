@@ -32,7 +32,7 @@ async def get_result_poll_handler(poll_id: str) -> Poll:
 
 
 @router.post("/poll/", response_description="Vote for a specific option")
-async def vote_for_specific_choice(poll_id: str, choice_id: str):
+async def vote_for_specific_choice(poll_id: str, choice_id: str) -> Poll:
     poll = await crud.get_poll(poll_id)
     if poll is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The poll was not found")

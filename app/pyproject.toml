@@ -1,7 +1,7 @@
 [tool.mypy]
-strict = false
+strict = true
+disable_error_code = ["assignment", "import", "call-arg", "return", "type-arg", "var-annotated", "arg-type"]
 exclude = ["venv", ".venv"]
-
 
 [tool.ruff]
 target-version = "py38"

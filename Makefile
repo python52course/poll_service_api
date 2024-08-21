@@ -28,7 +28,7 @@ tests-coverage:
 	${DC} ${ENV} exec ${APP_CONTAINER} pytest --cov=. tests
 
 mypy:
-	${DC} ${ENV} exec ${APP_CONTAINER} mypy .
+	${DC} ${ENV} exec ${APP_CONTAINER} mypy --explicit-package-bases .
 
 ruff-check:
 	${DC} ${ENV} exec ${APP_CONTAINER} ruff check .

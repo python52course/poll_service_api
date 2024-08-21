@@ -1,4 +1,7 @@
+from typing import Any, Dict, Tuple
+
 import pytest
+from httpx import AsyncClient
 
 
 @pytest.mark.parametrize(
@@ -11,7 +14,9 @@ import pytest
     ],
     indirect=True,
 )
-async def test_get_results_exists_poll(async_session, create_poll_fixture):
+async def test_get_results_exists_poll(
+    async_session: AsyncClient, create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]]
+) -> None:
     data = create_poll_fixture[1]
     poll_id = create_poll_fixture[0]["id"]
     response = await async_session.get(f"/getResult/{poll_id}/")
@@ -23,7 +28,7 @@ async def test_get_results_exists_poll(async_session, create_poll_fixture):
     assert [choice["text"] for choice in response_data["choices"]] == data["choices"]
 
 
-async def test_get_results_not_exists_poll(async_session):
+async def test_get_results_not_exists_poll(async_session: AsyncClient) -> None:
     invalid_id = "66ba0f7cd68573b792b449ff"
     response = await async_session.get(f"/getResult/{invalid_id}/")
 
@@ -31,7 +36,7 @@ async def test_get_results_not_exists_poll(async_session):
     assert response.json() == {"detail": "The poll not found"}
 
 
-async def test_get_results_invalid_poll_id(async_session):
+async def test_get_results_invalid_poll_id(async_session: AsyncClient) -> None:
     invalid_id = "66ba0f7cd68573b792b449"
     response = await async_session.get(f"/getResult/{invalid_id}/")
 
