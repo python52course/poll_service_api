@@ -35,4 +35,3 @@ ruff-check:
 
 ruff-fix:
 	${DC} ${ENV} exec ${APP_CONTAINER} ruff check . --fix
-

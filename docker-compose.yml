@@ -2,7 +2,7 @@ services:
   mongo_db:
       image: mongo
       container_name: "mongo_db"
-      restart: always    
+      restart: always
       ports:
         - "${MONGO_DB_PORT}:27017"
       volumes:
@@ -13,7 +13,7 @@ services:
       context: ./app
       dockerfile: Dockerfile
     container_name: poll-app
-    ports: 
+    ports:
       - "${API_PORT}:8000"
     command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     env_file:
@@ -35,10 +35,10 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo_db
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_ADMIN_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_ADMIN_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://mongo_db:${MONGO_DB_PORT}/ 
+      ME_CONFIG_MONGODB_URL: mongodb://mongo_db:${MONGO_DB_PORT}/
     depends_on:
       - mongo_db
-    
+
 
 volumes:
   dbdata:
