@@ -2,9 +2,8 @@ from typing import Optional
 from uuid import uuid4
 
 from bson import ObjectId
-from bson.errors import InvalidId
-from fastapi import HTTPException, status
 
+from common import utils
 from core.database import poll_collection
 from poll.schemas import CreatePoll, Poll
 
@@ -12,18 +11,6 @@ from poll.schemas import CreatePoll, Poll
 async def _check_exists_poll(question: str) -> Optional[str]:
     poll = await poll_collection.find_one({"question": question})
     return poll["_id"] if poll else None
-
-
-async def _validate_object_id(object_id: str) -> str:
-    try:
-        object_id = ObjectId(object_id)
-    except InvalidId:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="poll_id is not valid, poll_id must be 24 character",
-        )
-    else:
-        return object_id
 
 
 async def create_poll(poll: CreatePoll) -> Poll:
@@ -39,7 +26,7 @@ async def create_poll(poll: CreatePoll) -> Poll:
 
 
 async def get_poll_results(poll_id: str) -> Optional[Poll]:
-    poll_id = await _validate_object_id(poll_id)
+    poll_id = await utils.check_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:
         poll["id"] = str(poll["_id"])
@@ -47,7 +34,7 @@ async def get_poll_results(poll_id: str) -> Optional[Poll]:
 
 
 async def get_poll(poll_id: str) -> Optional[Poll]:
-    poll_id = await _validate_object_id(poll_id)
+    poll_id = await utils.check_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:
         poll["id"] = str(poll["_id"])
@@ -55,7 +42,7 @@ async def get_poll(poll_id: str) -> Optional[Poll]:
 
 
 async def update_vote_in_poll(poll_id: str, choice_id: str) -> Optional[Poll]:
-    poll_id = await _validate_object_id(poll_id)
+    poll_id = await utils.check_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": ObjectId(poll_id)})
     if poll:
         for choice in poll["choices"]:

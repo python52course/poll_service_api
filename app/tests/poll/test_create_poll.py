@@ -1,7 +1,10 @@
 from typing import Any, Dict
 
 import pytest
+from fastapi import status
 from httpx import AsyncClient
+
+from common.exc_enums import ExceptionMessages
 
 
 @pytest.mark.parametrize(
@@ -24,7 +27,7 @@ from httpx import AsyncClient
 async def test_create_poll(async_session: AsyncClient, data: Dict[str, Any]) -> None:
     response = await async_session.post("/createPoll/", json=data)
     response_data = response.json()
-    assert response.status_code == 201
+    assert response.status_code == status.HTTP_201_CREATED
     assert response_data["question"] == data["question"]
     assert [choice["text"] for choice in response_data["choices"]] == data["choices"]
     assert response_data["choices"][0]["votes"] == 0
@@ -36,12 +39,12 @@ async def test_create_duplicate_poll(async_session: AsyncClient) -> None:
         "choices": ["Python", "JavaScript", "Java", "Swift"],
     }
     response = await async_session.post("/createPoll/", json=data)
-    assert response.status_code == 201
+    assert response.status_code == status.HTTP_201_CREATED
 
     response = await async_session.post("/createPoll/", json=data)
     response_data = response.json()
-    assert response.status_code == 409
-    assert "The poll already exists, check the poll_id" in response_data["detail"]
+    assert response.status_code == status.HTTP_409_CONFLICT
+    assert ExceptionMessages.PollAllReadyExistsException.value in response_data["detail"]
 
 
 @pytest.mark.parametrize(
@@ -68,4 +71,4 @@ async def test_for_invalid_input_returns_error_code(
     async_session: AsyncClient, data: Dict[str, Any]
 ) -> None:
     response = await async_session.post("/createPoll/", json=data)
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

@@ -1,7 +1,10 @@
 from typing import Any, Dict, Tuple
 
 import pytest
+from fastapi import status
 from httpx import AsyncClient
+
+from common.exc_enums import ExceptionMessages
 
 
 @pytest.mark.parametrize(
@@ -22,7 +25,7 @@ async def test_get_results_exists_poll(
     response = await async_session.get(f"/getResult/{poll_id}/")
     response_data = response.json()
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response_data["id"] == poll_id
     assert response_data["question"] == data["question"]
     assert [choice["text"] for choice in response_data["choices"]] == data["choices"]
@@ -32,13 +35,13 @@ async def test_get_results_not_exists_poll(async_session: AsyncClient) -> None:
     invalid_id = "66ba0f7cd68573b792b449ff"
     response = await async_session.get(f"/getResult/{invalid_id}/")
 
-    assert response.status_code == 404
-    assert response.json() == {"detail": "The poll not found"}
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {"detail": ExceptionMessages.PollDoesNotExistsException.value}
 
 
 async def test_get_results_invalid_poll_id(async_session: AsyncClient) -> None:
     invalid_id = "66ba0f7cd68573b792b449"
     response = await async_session.get(f"/getResult/{invalid_id}/")
 
-    assert response.status_code == 400
-    assert response.json() == {"detail": "poll_id is not valid, poll_id must be 24 character"}
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json() == {"detail": ExceptionMessages.ObjectIdNotValidException.value}

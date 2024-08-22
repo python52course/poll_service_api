@@ -5,6 +5,8 @@ import pytest
 from fastapi import status
 from httpx import AsyncClient
 
+from common.exc_enums import ExceptionMessages
+
 
 @pytest.mark.parametrize(
     "create_poll_fixture",
@@ -36,19 +38,19 @@ async def test_valid_vote(
         (
             "66bf3d2525228d2fb65e0a5b",
             "7f28b0",
-            {"detail": "The poll was not found"},
+            {"detail": ExceptionMessages.PollDoesNotExistsException.value},
             status.HTTP_404_NOT_FOUND,
         ),
         (
             "66bf3d2525228d2fb65e0",
             "7f28b0",
-            {"detail": "poll_id is not valid, poll_id must be 24 character"},
+            {"detail": ExceptionMessages.ObjectIdNotValidException.value},
             status.HTTP_400_BAD_REQUEST,
         ),
         (
             "",
             "",
-            {"detail": "poll_id is not valid, poll_id must be 24 character"},
+            {"detail": ExceptionMessages.ObjectIdNotValidException.value},
             status.HTTP_400_BAD_REQUEST,
         ),
     ],
@@ -85,4 +87,4 @@ async def test_vote_with_invalid_choice_id(
     response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {"detail": "There is no such answer option"}
+    assert response.json() == {"detail": ExceptionMessages.OptionDoesNotExistsException.value}
