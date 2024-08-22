@@ -50,7 +50,7 @@ list main routes of poll_service_api, and what are their expected request bodies
 <h2 id="post-auth-detail">POST /api/createPoll/</h2>
 
 **REQUEST**
-```json
+```shell
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/createPoll/' \
   -H 'accept: application/json' \
@@ -94,7 +94,7 @@ curl -X 'POST' \
 <h2 id="post-auth-detail">POST /api/getResult/</h2>
 
 **REQUEST**
-```json
+```shell
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/getResult/' \
   -H 'accept: application/json' \
@@ -132,7 +132,7 @@ curl -X 'POST' \
 <h2 id="post-auth-detail">POST /api/poll/</h2>
 
 **REQUEST**
-```json
+```shell
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/poll/' \
   -H 'accept: application/json' \
