@@ -5,14 +5,10 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-RUN apt update -y && \
-    apt install -y curl
-
 RUN pip install --upgrade pip
+RUN pip install poetry
 
-COPY ./requirements.txt .
-COPY ./requirements-dev.txt .
+ADD pyproject.toml /app
 
-RUN pip install --no-cache-dir -r requirements-dev.txt
-
-COPY . .
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-root --no-interaction --no-ansi

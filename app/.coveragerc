@@ -1,0 +1,6 @@
+[coverage:run]
+omit =
+    tests/*
+    */__init__.py
+    common/*
+    core/*
