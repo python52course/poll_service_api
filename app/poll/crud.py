@@ -9,11 +9,27 @@ from poll.schemas import CreatePoll, Poll
 
 
 async def _check_exists_poll(question: str) -> Optional[str]:
+    """
+    Check if a poll with the given question already exists.
+
+    Args:
+        question (str): The question of the poll.
+    Returns:
+        Optional[str]: The ID of the existing poll if it exists, otherwise None.
+    """
     poll = await poll_collection.find_one({"question": question})
     return poll["_id"] if poll else None
 
 
 async def create_poll(poll: CreatePoll) -> Poll:
+    """
+    Create a new poll.
+
+    Args:
+        poll (CreatePoll): The poll to create.
+    Returns:
+        Poll: The created poll.
+    """
     poll_data = {
         "question": poll.question,
         "choices": [
@@ -26,14 +42,14 @@ async def create_poll(poll: CreatePoll) -> Poll:
 
 
 async def get_poll_results(poll_id: str) -> Optional[Poll]:
-    poll_id = await utils.check_object_id(poll_id)
-    poll = await poll_collection.find_one({"_id": poll_id})
-    if poll:
-        poll["id"] = str(poll["_id"])
-        return Poll(**poll)
+    """
+    Get the results of a poll.
 
-
-async def get_poll(poll_id: str) -> Optional[Poll]:
+    Args:
+        poll_id (str): The ID of the poll.
+    Returns:
+        Optional[Poll]: The poll results if it exists, otherwise None.
+    """
     poll_id = await utils.check_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:
@@ -42,6 +58,15 @@ async def get_poll(poll_id: str) -> Optional[Poll]:
 
 
 async def update_vote_in_poll(poll_id: str, choice_id: str) -> Optional[Poll]:
+    """
+    Updates the vote in a poll.
+
+    Args:
+        poll_id (str): The ID of the poll.
+        choice_id (str): The ID of the choice to vote for.
+    Returns:
+        Optional[Poll]: The updated poll if it exists, otherwise None.
+    """
     poll_id = await utils.check_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": ObjectId(poll_id)})
     if poll:

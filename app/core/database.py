@@ -9,7 +9,12 @@ client = AsyncIOMotorClient(settings.MONGODB_URL)
 
 
 def get_database() -> Tuple[AsyncIOMotorDatabase, AsyncIOMotorCollection]:
-    """prepare database"""
+    """
+    Prepares the database.
+
+    Returns:
+        Tuple[AsyncIOMotorDatabase, AsyncIOMotorCollection]: The database and the poll collection.
+    """
 
     TEST_MODE = os.getenv("MODE") == "TEST"
     if TEST_MODE:

@@ -2,6 +2,10 @@ from enum import Enum
 
 
 class ExceptionMessages(Enum):
+    """
+    Enum of exception messages.
+    """
+
     PollAllReadyExistsException = "The poll already exists, check the poll_id"
     PollDoesNotExistsException = "The poll was not found"
     OptionDoesNotExistsException = "There is no such answer option"
