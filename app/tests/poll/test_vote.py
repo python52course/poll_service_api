@@ -22,7 +22,7 @@ async def test_valid_vote(
     async_session: AsyncClient, create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]]
 ) -> None:
     poll_id = create_poll_fixture[0]["id"]
-    response = await async_session.get(f"/getResult/{poll_id}/")
+    response = await async_session.post(f"/getResult/?poll_id={poll_id}")
 
     choice_ids = [choice["id"] for choice in response.json()["choices"]]
     choice_id = choice(choice_ids)
@@ -82,7 +82,7 @@ async def test_vote_with_invalid_choice_id(
     async_session: AsyncClient, create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]]
 ) -> None:
     poll_id = create_poll_fixture[0]["id"]
-    response = await async_session.get(f"/getResult/{poll_id}/")
+    response = await async_session.get(f"/getResult/{poll_id}")
     choice_id = "7f28b0"
     response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
 

@@ -32,7 +32,7 @@ async def create_poll(poll: CreatePoll) -> Poll:
     return created_pool
 
 
-@router.get("/getResult/{poll_id}/", response_description="Get the poll results")
+@router.post("/getResult/", response_description="Get the poll results")
 async def get_result_poll(poll_id: str) -> Poll:
     """
     Get the results of a poll.
