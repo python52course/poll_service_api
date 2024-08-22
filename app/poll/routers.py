@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Body, status
 
 import poll.crud as crud
 from common import exceptions
@@ -33,7 +33,9 @@ async def create_poll(poll: CreatePoll) -> Poll:
 
 
 @router.post("/getResult/", response_description="Get the poll results")
-async def get_result_poll(poll_id: str) -> Poll:
+async def get_result_poll(
+    poll_id: str = Body(..., embed=True),
+) -> Poll:
     """
     Get the results of a poll.
 
@@ -51,7 +53,10 @@ async def get_result_poll(poll_id: str) -> Poll:
 
 
 @router.post("/poll/", response_description="Vote for a specific option")
-async def vote_for_specific_choice(poll_id: str, choice_id: str) -> Poll:
+async def vote_for_specific_choice(
+    poll_id: str = Body(..., embed=True),
+    choice_id: str = Body(..., embed=True),
+) -> Poll:
     """
     Vote for a specific option in a poll.
 

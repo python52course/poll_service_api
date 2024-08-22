@@ -22,11 +22,11 @@ async def test_valid_vote(
     async_session: AsyncClient, create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]]
 ) -> None:
     poll_id = create_poll_fixture[0]["id"]
-    response = await async_session.post(f"/getResult/?poll_id={poll_id}")
+    response = await async_session.post("/getResult/", json={"poll_id": poll_id})
 
     choice_ids = [choice["id"] for choice in response.json()["choices"]]
     choice_id = choice(choice_ids)
-    response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
+    response = await async_session.post("/poll/", json={"poll_id": poll_id, "choice_id": choice_id})
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["choices"][choice_ids.index(choice_id)]["votes"] == 1
@@ -62,7 +62,7 @@ async def test_vote_with_invalid_poll_id(
     expected_message: str,
     status_code: int,
 ) -> None:
-    response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
+    response = await async_session.post("/poll/", json={"poll_id": poll_id, "choice_id": choice_id})
 
     assert response.status_code == status_code
     assert response.json() == expected_message
@@ -84,7 +84,7 @@ async def test_vote_with_invalid_choice_id(
     poll_id = create_poll_fixture[0]["id"]
     response = await async_session.get(f"/getResult/{poll_id}")
     choice_id = "7f28b0"
-    response = await async_session.post(f"/poll/?poll_id={poll_id}&choice_id={choice_id}")
+    response = await async_session.post("/poll/", json={"poll_id": poll_id, "choice_id": choice_id})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == {"detail": ExceptionMessages.OptionDoesNotExistsException.value}
