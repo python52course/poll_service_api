@@ -23,10 +23,10 @@ jobs:
       run: cp .env.example .env
 
     - name: Build and run Docker Compose
-      run: docker compose --env-file ./app/.env up -d --build
+      run: docker compose up -d --build
 
     - name: Run tests
-      run: docker compose --env-file ./app/.env exec poll-app pytest
+      run: docker compose exec poll-app pytest
 
     - name: Shut down Docker Compose
       run: docker compose down

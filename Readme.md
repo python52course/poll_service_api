@@ -1,7 +1,6 @@
 # This project is a simple voting service built with FastAPI.
-![Tests](https://github.com/python52course/poll_service_api/actions/workflows/ci.yml/badge.svg)
 
-<h2 id="technologies">Technologies</h2>
+## Technologies
 
 - Python
 - FastAPI
@@ -9,25 +8,25 @@
 - Docker
 - Docker-Compose
 
-<h2 id="started"> Getting started</h2>
+## Getting started
 
-###  list all requirements necessary for running project.
+###  list requirements necessary for running project.
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
 
-<h3>Cloning</h3>
+### Cloning
 
 ```bash
 git clone https://github.com/python52course/poll_service_api
 ```
 
-<h3>Config .env variables</h2>
+### Config .env variables
 
 Use the `.env.example` as reference to create your configuration file `.env`
 
-<h3>Starting</h3>
+### Starting
 
 How to start
 
@@ -39,9 +38,9 @@ docker compose up
 docker compose exec poll-app pytest --cov=. tests
 ```
 
-<h2 id="routes">API Endpoints</h2>
+## API Endpoints
 
-list main routes of poll_service_api, and what are their expected request bodies.
+list routes of poll_service_api, and what are their expected request bodies.
 ​
 | route               | description
 |----------------------|-----------------------------------------------------
@@ -49,10 +48,10 @@ list main routes of poll_service_api, and what are their expected request bodies
 | <kbd>POST /api/getResult/</kbd>     | get the result for a specific vote: <poll_id>
 | <kbd>POST /api/poll/</kbd>     | to vote for a specific option: <poll_id, choice_id>
 
-<h2 id="post-auth-detail">POST /api/createPoll/</h2>
+## POST /api/createPoll/
 
 **REQUEST**
-```shell
+```bash
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/createPoll/' \
   -H 'accept: application/json' \
@@ -93,10 +92,10 @@ curl -X 'POST' \
 ```
 
 
-<h2 id="post-auth-detail">POST /api/getResult/</h2>
+## POST /api/getResult/
 
 **REQUEST**
-```shell
+```bash
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/getResult/' \
   -H 'accept: application/json' \
@@ -131,10 +130,10 @@ curl -X 'POST' \
 }
 ```
 
-<h2 id="post-auth-detail">POST /api/poll/</h2>
+## POST /api/poll/
 
 **REQUEST**
-```shell
+```bash
 curl -X 'POST' \
   'http://127.0.0.1:8000/api/poll/' \
   -H 'accept: application/json' \
