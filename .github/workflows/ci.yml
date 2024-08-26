@@ -20,17 +20,13 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Setup environment variables
-      run: |
-        echo HOST=http://127.0.0.1 > ./app/.env
-        echo API_PORT=8000 >> ./app/.env
-        echo MONGODB_URL=mongodb://mongo_db >> ./app/.env
-        echo MONGO_DB_PORT=27017 >> ./app/.env
+      run: cp .env.example .env
 
     - name: Build and run Docker Compose
-      run: docker compose --env-file ./app/.env up -d --build
+      run: docker compose up -d --build
 
     - name: Run tests
-      run: docker compose --env-file ./app/.env exec poll-app pytest
+      run: docker compose exec poll-app pytes
 
     - name: Shut down Docker Compose
       run: docker compose down
