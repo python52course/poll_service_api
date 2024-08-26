@@ -17,7 +17,7 @@ services:
       - "${API_PORT}:8000"
     command: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     env_file:
-      - ./app/.env
+      - .env
     environment:
       - MONGODB_URL=mongodb://mongo_db
     volumes:

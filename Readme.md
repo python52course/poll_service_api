@@ -34,10 +34,12 @@ How to start
 ```bash
 cd poll_service_api
 
-docker compose --env-file ./app/.env up --build -d
+docker compose up
+
+docker compose exec poll-app pytest --cov=. tests
 ```
 
-<h2 id="routes">📍 API Endpoints</h2>
+<h2 id="routes">API Endpoints</h2>
 
 list main routes of poll_service_api, and what are their expected request bodies.
 ​
