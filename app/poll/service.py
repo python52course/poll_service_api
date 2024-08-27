@@ -9,12 +9,12 @@ from config.database import poll_collection
 from poll.schemas import CreatePoll, Poll
 
 
-async def _check_exists_poll(question: str) -> Poll:
+async def _check_exists_poll(question: str) -> Optional[str]:
     poll = await poll_collection.find_one({"question": question})
-    return poll["_id"] if poll else False
+    return poll["_id"] if poll else None
 
 
-async def _validate_object_id(object_id):
+async def _validate_object_id(object_id: str) -> str:
     try:
         object_id = ObjectId(object_id)
     except InvalidId:
@@ -38,7 +38,7 @@ async def create_poll(poll: CreatePoll) -> Poll:
     return Poll(**poll_data)
 
 
-async def get_poll_results(poll_id: str) -> Poll:
+async def get_poll_results(poll_id: str) -> Optional[Poll]:
     poll_id = await _validate_object_id(poll_id)
     poll = await poll_collection.find_one({"_id": poll_id})
     if poll:

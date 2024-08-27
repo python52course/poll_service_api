@@ -1,7 +1,9 @@
 from random import choice
+from typing import Any, Dict, Tuple
 
 import pytest
 from fastapi import status
+from httpx import AsyncClient
 
 
 @pytest.mark.parametrize(
@@ -14,7 +16,10 @@ from fastapi import status
     ],
     indirect=True,
 )
-async def test_valid_vote(async_session, create_poll_fixture):
+async def test_valid_vote(
+    async_session: AsyncClient,
+    create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]],
+) -> None:
     poll_id = create_poll_fixture[0]["id"]
     response = await async_session.post("/getResult/", json={"poll_id": poll_id})
 
@@ -50,8 +55,12 @@ async def test_valid_vote(async_session, create_poll_fixture):
     ],
 )
 async def test_vote_with_invalid_poll_id(
-    async_session, poll_id, choice_id, expected_message, status_code
-):
+    async_session: AsyncClient,
+    poll_id: str,
+    choice_id: str,
+    expected_message: str,
+    status_code: int,
+) -> None:
     response = await async_session.post("/poll/", json={"poll_id": poll_id, "choice_id": choice_id})
 
     assert response.status_code == status_code
@@ -68,7 +77,9 @@ async def test_vote_with_invalid_poll_id(
     ],
     indirect=True,
 )
-async def test_vote_with_invalid_choice_id(async_session, create_poll_fixture):
+async def test_vote_with_invalid_choice_id(
+    async_session: AsyncClient, create_poll_fixture: Tuple[Dict[str, Any], Dict[str, Any]]
+) -> None:
     poll_id = create_poll_fixture[0]["id"]
     response = await async_session.get(f"/getResult/{poll_id}/")
     choice_id = "7f28b0"

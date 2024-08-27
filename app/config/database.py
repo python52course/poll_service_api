@@ -1,13 +1,14 @@
 import os
+from typing import Tuple
 
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
 
 from config.settings import settings
 
 client = AsyncIOMotorClient(settings.mongodb_url)
 
 
-def get_database():
+def get_database() -> Tuple[AsyncIOMotorDatabase, AsyncIOMotorCollection]:
     """prepare database"""
 
     TEST_MODE = os.getenv("MODE") == "TEST"
