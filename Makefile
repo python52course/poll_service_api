@@ -3,7 +3,7 @@ DC = docker compose
 EXEC = docker exec -it
 LOGS = docker logs
 
-.PHONY: app app-restart app-down app-logs app-shell tests tests-coverage check-flake8 check-black check-isort fix-black
+.PHONY: app app-restart app-down app-logs app-shell tests tests-coverage mypy ruff-check ruff-fix
 
 app:
 	${DC} up --build -d
@@ -26,14 +26,11 @@ tests:
 tests-coverage:
 	${DC} exec ${APP_CONTAINER} pytest --cov=. tests
 
-check-flake8:
-	${DC} exec ${APP_CONTAINER} flake8 .
+mypy:
+	${DC} exec -T ${APP_CONTAINER} mypy --explicit-package-bases .
 
-check-black:
-	${DC} exec ${APP_CONTAINER} black --check .
+ruff-check:
+	${DC} exec -T ${APP_CONTAINER} ruff check .
 
-check-isort:
-	${DC} exec ${APP_CONTAINER} isort --check .
-
-fix-black-isort:
-	${DC} exec ${APP_CONTAINER} black . ; ${DC} exec ${APP_CONTAINER} isort .
+ruff-fix:
+	${DC} exec -T ${APP_CONTAINER} ruff check . --fix
