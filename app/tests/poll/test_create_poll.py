@@ -1,4 +1,7 @@
+from typing import Any, Dict
+
 import pytest
+from httpx import AsyncClient
 
 
 @pytest.mark.parametrize(
@@ -18,7 +21,10 @@ import pytest
         },
     ],
 )
-async def test_create_poll(async_session, data):
+async def test_create_poll(
+    async_session: AsyncClient,
+    data: Dict[str, Any],
+) -> None:
     response = await async_session.post("/createPoll/", json=data)
     response_data = response.json()
     assert response.status_code == 201
@@ -27,7 +33,7 @@ async def test_create_poll(async_session, data):
     assert response_data["choices"][0]["votes"] == 0
 
 
-async def test_create_duplicate_poll(async_session):
+async def test_create_duplicate_poll(async_session: AsyncClient) -> None:
     data = {
         "question": "What is your favorite programming language?",
         "choices": ["Python", "JavaScript", "Java", "Swift"],
@@ -61,6 +67,9 @@ async def test_create_duplicate_poll(async_session):
         {},
     ],
 )
-async def test_for_invalid_input_returns_error_code(async_session, data):
+async def test_for_invalid_input_returns_error_code(
+    async_session: AsyncClient,
+    data: Dict[str, Any],
+) -> None:
     response = await async_session.post("/createPoll/", json=data)
     assert response.status_code == 422

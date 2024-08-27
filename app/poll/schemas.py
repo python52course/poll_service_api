@@ -20,13 +20,13 @@ class CreatePoll(BaseModel):
     choices: List[str] = Field(description="Poll options")
 
     @field_validator("question")
-    def validate_question(cls, value: str):
+    def validate_question(cls, value: str) -> str:
         if not value.strip():
             raise ValueError("Question can not be empty")
         return value
 
     @field_validator("choices")
-    def validate_choices(cls, value: list):
+    def validate_choices(cls, value: list) -> List[Choice]:
         if not value:
             raise ValueError("Poll options can not be empty")
         elif len(set(value)) < 2:
