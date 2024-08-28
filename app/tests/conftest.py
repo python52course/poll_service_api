@@ -15,7 +15,10 @@ os.environ["MODE"] = "TEST"
 @pytest.fixture(autouse=True)
 async def connection_db() -> AsyncGenerator[AsyncIOMotorDatabase, None]:
     """
-    Create a test database for use in tests.
+    A pytest fixture to connect to the database.
+
+    Returns:
+        AsyncGenerator[AsyncIOMotorDatabase, None]: A generator that yields the database connection.
     """
 
     client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
