@@ -1,6 +1,6 @@
 import pytest
 
-from app.config.database import client
+from app.core.database import client
 
 
 @pytest.mark.asyncio

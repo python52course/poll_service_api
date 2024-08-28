@@ -3,7 +3,7 @@ from typing import Any, AsyncGenerator, Dict, Tuple
 import pytest
 from httpx import AsyncClient
 
-from config.settings import server_url
+from core.config import server_url
 from main import app
 
 
