@@ -3,21 +3,24 @@ from typing import Tuple
 
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
 
-from config.settings import settings
+from core.config import settings
 
-client = AsyncIOMotorClient(settings.mongodb_url)
+client = AsyncIOMotorClient(settings.MONGODB_URL)
 
 
 def get_database() -> Tuple[AsyncIOMotorDatabase, AsyncIOMotorCollection]:
-    """prepare database"""
+    """
+    Prepare the database.
 
+    Returns:
+        Tuple[AsyncIOMotorDatabase, AsyncIOMotorCollection]: The database and the poll collection.
+    """
     TEST_MODE = os.getenv("MODE") == "TEST"
     if TEST_MODE:
         db = client.get_database("test_poll_database")
-        poll_collection = db.get_collection("test_poll_collection")
     else:
         db = client.get_database("poll_database")
-        poll_collection = db.get_collection("poll_collection")
+    poll_collection = db.get_collection("poll_collection")
     return db, poll_collection
 
 
