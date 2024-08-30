@@ -7,7 +7,7 @@ services:
         value: mongodb://mongo_db
       - key: MONGO_DB_PORT
         value: 27017
-    startCommand: mongod --bind_ip 0.0.0.0
+    dockerCommand: mongod --bind_ip 0.0.0.0
     disk:
       name: data
       mountPath: /data/db
@@ -19,7 +19,7 @@ services:
     runtime: docker
     dockerfilePath: ./app/Dockerfile
     buildCommand: poetry install --no-root --no-interaction --no-ansi
-    startCommand: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    dockerCommand: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     envVars:
       - key: API_PORT
         value: "8000"
