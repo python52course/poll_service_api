@@ -1,0 +1,30 @@
+services:
+  - type: pserv
+    runtime: docker
+    name: mongodb
+    envVars:
+      - key: MONGODB_URL
+        value: mongodb://mongo_db
+      - key: MONGO_DB_PORT
+        value: 27017
+    startCommand: mongod --bind_ip 0.0.0.0
+    disk:
+      name: data
+      mountPath: /data/db
+      sizeGB: 10
+
+  - type: web
+    name: poll-app
+    plan: free
+    runtime: docker
+    dockerfilePath: ./app/Dockerfile
+    buildCommand: poetry install --no-root --no-interaction --no-ansi
+    startCommand: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    envVars:
+      - key: API_PORT
+        value: "8000"
+      - key: HOST
+        value: "http://127.0.0.1"
+      - key: API_PORT
+        value: "8000"
+    autoDeploy: true
