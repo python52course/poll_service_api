@@ -1,0 +1,52 @@
+services:
+  # Web service for the poll application
+  - type: web
+    name: poll-app
+    plan: free  # или standard, в зависимости от ваших требований
+    dockerfilePath: ./app/Dockerfile
+    buildCommand: poetry install --no-root --no-interaction --no-ansi
+    startCommand: uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    envVars:
+      - key: API_PORT
+        value: "8000"  # Используйте значение переменной из .env, если необходимо
+    env:
+      - .env  # Подключение файла с переменными окружения
+    mounts:
+      - type: volume  # Загрузка исходного кода из каталога `app`
+        source: ./app
+        target: /app
+    autoDeploy: true  # Автоматический деплой при каждом push на GitHub/GitLab
+
+  # Database service for MongoDB
+  - type: database
+    name: mongo_db
+    plan: free
+    engine: mongodb
+    version: 4.4  # Версию MongoDB можно изменить, если нужно
+    envVars:
+      - key: MONGO_DB_PORT
+        value: "27017"  # Используйте значение переменной из .env, если необходимо
+    mounts:
+      - type: volume
+        source: dbdata  # Название volume из docker-compose
+        target: /data/db
+
+  # Mongo Express service for managing MongoDB
+  - type: web
+    name: mongo-express
+    env: docker
+    plan: free
+    dockerfilePath: ""
+    image: mongo-express  # Использование официального образа
+    startCommand: ""  # Для Mongo Express используется стандартный командный запуск
+    envVars:
+      - key: ME_CONFIG_MONGODB_SERVER
+        value: mongo_db
+      - key: ME_CONFIG_BASICAUTH_USERNAME
+        value: ${MONGO_EXPRESS_ADMIN_USERNAME}  # Значение из переменной окружения
+      - key: ME_CONFIG_BASICAUTH_PASSWORD
+        value: ${MONGO_EXPRESS_ADMIN_PASSWORD}
+      - key: ME_CONFIG_MONGODB_URL
+        value: mongodb://mongo_db:${MONGO_DB_PORT}/
+    dependsOn:
+      - mongo_db
